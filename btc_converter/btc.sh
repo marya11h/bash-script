@@ -6,7 +6,7 @@ Delay=10
 
 while true; do
 
-        bitcoin=$(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd" | sed -E 's/.*"usd":([0-9]+).*/\1/')
+        bitcoin=$(curl -s "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd" | jq -r '.bitcoin.usd')
 
         if [[ -z "$bitcoin" || ! "$bitcoin" =~ ^[0-9]+$ ]]; then
                 echo "Error: No bitcoin price recieved."
@@ -14,8 +14,7 @@ while true; do
                 continue
         fi
 
-        Bitcoin_in_tomon=$(echo "$Dollar $bitcoin" | awk '{print $1 * $2}')
-        echo "Bitcoin in toman: $Bitcoin_in_toman"
+        Bitcoin_in_tomon=$(Dollar*bitcoin))"
         current_date=$(date)
 
         output="Bitcoin Price in Toman: $Bitcoin_in_toman -- $current_date"
